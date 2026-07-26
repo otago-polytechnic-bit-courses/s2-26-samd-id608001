@@ -11,11 +11,12 @@ class StudioClassInline(admin.TabularInline):
 class StudioAdmin(admin.ModelAdmin):
     list_display = ("name", "suburb", "city", "accepting_members")
     search_fields = ("name", "suburb", "city")
+    list_filter = ("suburb", "city")
     inlines = [StudioClassInline]
 
 
 @admin.register(StudioClass)
 class StudioClassAdmin(admin.ModelAdmin):
-    list_display = ("name", "studio", "duration", "capacity")
-    list_filter = ("studio",)
+    search_fields = ("name", "studio__name", "studio__suburb", "studio__city")
+    list_filter = ("studio", "studio__suburb", "studio__city")
     ordering = ("studio", "name")
