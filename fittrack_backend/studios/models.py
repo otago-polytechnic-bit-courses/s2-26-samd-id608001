@@ -12,6 +12,10 @@ class Studio(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Studio"
+        verbose_name_plural = "Studios"
+
 class StudioClass(models.Model):
     studio = models.ForeignKey(
         Studio,
@@ -24,3 +28,7 @@ class StudioClass(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.studio.name})"
+
+    class Meta:
+        verbose_name = "Studio Class"
+        verbose_name_plural = "Studio Classes"
