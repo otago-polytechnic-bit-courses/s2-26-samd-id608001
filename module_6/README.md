@@ -1,0 +1,2 @@
+## Task 6
+React navigator makes you configure what screens are in the stack and the variables that get parsed into the screen. In Expo Router these are configured by the directory structure and params are parsed into the url.

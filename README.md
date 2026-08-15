@@ -7,3 +7,4 @@ Each module has it's own README file to keep everything separated and organized.
 - [Module 3 - API TESTING](module_3/API_TESTING.md)
 - [Module 4](module_4/README.md)
 - [App Design](app_design/README.md)
+- [Module 6](module_6/README.md)
