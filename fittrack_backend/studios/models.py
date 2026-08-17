@@ -1,8 +1,14 @@
+from django.contrib.auth.models import User
 from django.db import models
 import datetime
 
 
 class Studio(models.Model):
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="studios",
+    )
     name = models.CharField(max_length=200)
     suburb = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
