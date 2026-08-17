@@ -8,3 +8,4 @@ Each module has it's own README file to keep everything separated and organized.
 - [Module 4](module_4/README.md)
 - [App Design](app_design/README.md)
 - [Module 6](module_6/README.md)
+- [Module 7 - API TESTING](module_7/API_TESTING.md)
