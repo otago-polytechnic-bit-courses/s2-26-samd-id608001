@@ -4,3 +4,5 @@
 
 ## Task 7
 Yes my original key was in my git repo. I generated a new key and added that into my .env file.
+
+## [Module 7 - APP DOCUMENTATION](app-documentation.md)
