@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import { FlatList, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { getStudios, Studio } from "../components/studiosApi";
+import { getStudios, Studio } from "../../components/studiosApi";
 
 export default function StudiosScreen() {
   const [studios, setStudios] = useState<Studio[]>([]);
