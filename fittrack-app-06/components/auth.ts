@@ -2,6 +2,7 @@ import * as SecureStore from "expo-secure-store";
 
 const ACCESS_KEY = "fittrack.access";
 const REFRESH_KEY = "fittrack.refresh";
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 
 interface Token {
     access: string,
@@ -23,7 +24,7 @@ export async function getRefreshToken(): Promise<string | null> {
 
 export async function refreshToken(): Promise<string | null> {
   const refreshToken = await getRefreshToken();
-  const response = await fetch("http://10.0.2.2:8000/api/token/refresh/", {
+  const response = await fetch(`${BASE_URL}/token/refresh/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),
