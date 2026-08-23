@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Studio, StudioClass
+from .models import Studio, StudioClass, Booking
 
 
 class StudioClassInline(admin.TabularInline):
@@ -20,3 +20,8 @@ class StudioClassAdmin(admin.ModelAdmin):
     search_fields = ("name", "studio__name", "studio__suburb", "studio__city")
     list_filter = ("studio", "studio__suburb", "studio__city")
     ordering = ("studio", "name")
+
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ("member", "studio_class", "status", "attended", "booked_at")
+    list_filter = ("status", "attended")
