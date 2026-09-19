@@ -1,8 +1,6 @@
-from django.contrib.auth import authenticate
 from django.db import connection
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Shed, Tool
 
