@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ShedViewSet, ToolListView
 
-from . import views
+router = DefaultRouter()
+router.register("sheds", ShedViewSet)
 
 urlpatterns = [
-    path("sheds/", views.sheds),
-    path("sheds/<int:id>/", views.shed_detail),
-    path("sheds/<int:id>/tools/", views.tools),
+    path('', include(router.urls)),
+    path("sheds/<int:id>/tools/", ToolListView.as_view()),
 ]
