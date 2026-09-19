@@ -135,22 +135,3 @@ def tools(request, id):
             "description": t.description,
         })
     return Response(d)
-
-
-@api_view(["POST"])
-def login(request):
-    body = request.data
-    print("login attempt: " + str(body))
-
-    user = authenticate(username=body["username"], password=body["password"])
-
-    if user is None:
-        return Response(
-            {"detail": "No active account found with the given credentials"}, status=401
-        )
-
-    refresh = RefreshToken.for_user(user)
-    return Response({
-        "access": str(refresh.access_token),
-        "refresh": str(refresh),
-    })
