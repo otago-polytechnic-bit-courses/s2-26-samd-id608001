@@ -42,11 +42,6 @@ def sheds(request):
             })
         return Response(d)
 
-    if request.user.is_authenticated == False:
-        return Response(
-            {"detail": "Authentication credentials were not provided."}, status=401
-        )
-
     body = request.data
     if "name" in body and body["name"] != "":
         s = Shed()
@@ -91,10 +86,6 @@ def shed_detail(request, id):
         })
 
     if request.method == "PUT":
-        if request.user.is_authenticated == False:
-            return Response(
-                {"detail": "Authentication credentials were not provided."}, status=401
-            )
         if s.owner.id != request.user.id and request.user.is_staff == False:
             return Response(
                 {"detail": "You do not have permission to perform this action."},
@@ -120,10 +111,6 @@ def shed_detail(request, id):
         })
 
     if request.method == "DELETE":
-        if request.user.is_authenticated == False:
-            return Response(
-                {"detail": "Authentication credentials were not provided."}, status=401
-            )
         if s.owner.id != request.user.id and request.user.is_staff == False:
             return Response(
                 {"detail": "You do not have permission to perform this action."},
