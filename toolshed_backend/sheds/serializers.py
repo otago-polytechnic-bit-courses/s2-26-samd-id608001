@@ -4,7 +4,6 @@ from .models import Shed, Tool
 
 class ShedSerializer(serializers.ModelSerializer):
     tool_count = serializers.SerializerMethodField()
-    partial = True
 
     class Meta:
         model = Shed
