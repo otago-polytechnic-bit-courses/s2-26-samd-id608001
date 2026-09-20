@@ -27,3 +27,7 @@ Brief list of changes made for presentation video.
 ## Changes made to address Problem #5
 - Add permissions.py with custom permission class
 - implement custom permission class into Serializer
+
+## Changes made to address Problem #6
+- Ran `pip freeze > requirements.txt` to generate requirement.txt file
+- Added Project Setup documentation at [[../toolshed_backend/project-setup.md]]
