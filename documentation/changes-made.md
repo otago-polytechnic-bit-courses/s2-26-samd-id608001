@@ -9,31 +9,31 @@ Brief list of changes made for presentation video.
 
 ## Changes made to address Problem #1
 - helpers.py file deleted
-YAGNI applied
+**YAGNI applied**
 
 ## Changes made to address Problem #2
 - Remove Auth checks from views
 - Change DEFAULT_PERMISSION_CLASSES in Settings.py from AllowAny to IsAuthenticatedOrReadOnly
 - Replace login view function with DRF TokenObtainPairView
 - Intended side effect: removed login attempt logging plain text passwords
-DRY Applied
+**DRY Applied**
 
 ## Changes made to address Problems #3 & #4
 - Add serializers.py
 - Implement DRF viewsets to use serializers (Broke ownership permission checks)
 - Implement DRF ListAPIView for tool list
-   - Alternative condisered: nested routers - dependency required - KISS
+   - *Alternative condisered: nested routers - dependency required - KISS*
 - Remove function based views
 - Optimize imports
 - Add custom update method to allow partial PUT requests
-DRY, Adapter Design Pattern Applied
+**DRY, Adapter Design Pattern Applied**
 
-Alternitives considered: keep function based views and refactor existing views
+*Alternitives considered: keep function based views and refactor existing views*
 
 ## Changes made to address Problem #5
 - Add permissions.py with custom permission class
 - implement custom permission class into Serializer
-Strategy Design Pattern, Separation of concerns
+**Strategy Design Pattern, Separation of concerns**
 
 ## Changes made to address Problem #6
 - Ran `pip freeze > requirements.txt` to generate requirement.txt file
