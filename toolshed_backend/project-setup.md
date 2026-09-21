@@ -37,6 +37,10 @@ pip install -r requirements.txt
 ```bash 
 python manage.py migrate
 ```
+2. Seed the database with test data
+```bash
+python manage.py seed
+```
 
 ## Run project tests (optional)
 ```bash
