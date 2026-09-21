@@ -101,7 +101,7 @@ views.py contains multiple manual definitions for permission checks.
 - 127 to 131
 
 ### Principle or Pattern Violated
-This violates both DRY (Don't Repeat Yourself) and the Strategy Design Pattern which aims to extract code into different interfaces or classes so that different ones cna be used and applied at runtime. 
+This violates both DRY (Don't Repeat Yourself) and the Strategy Design Pattern which aims to extract code into different interfaces or classes so that different ones can be used and applied at runtime. 
 
 ### Severity
 Medium Severity.
