@@ -24,6 +24,9 @@ class ShedViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
 
 class ToolListView(generics.ListAPIView):
     serializer_class = ToolSerializer
