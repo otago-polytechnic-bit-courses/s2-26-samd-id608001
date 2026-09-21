@@ -2,11 +2,10 @@
 Brief list of changes made for presentation video.
 
 ## Changes made apart from problems defined in [[diagnosis]]
-- Added a .gitignore & Removed _pycache_ files
+- Added a .gitignore & Removed _pycache_ files, database file and .env from git
 - Add and implement a .env file for SECRET_KEY, DEBUG & ALLOWED_HOSTS
 - Rotate SECRET_KEY
 - Add .env.example file
-- 
 
 ## Changes made to address Problem #1
 - helpers.py file deleted
@@ -23,6 +22,7 @@ Brief list of changes made for presentation video.
 - Implement DRF ListAPIView for tool list
 - Remove function based views
 - Optimize imports
+- Add custom update method to allow partial PUT requests
 
 ## Changes made to address Problem #5
 - Add permissions.py with custom permission class
