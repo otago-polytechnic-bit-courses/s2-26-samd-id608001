@@ -1,5 +1,5 @@
 {
-  "name": "my-recipe-book_app",
+  "name": "myrecipebook_app",
   "version": "0.0.0",
   "main": "expo-router/entry",
   "scripts": {
