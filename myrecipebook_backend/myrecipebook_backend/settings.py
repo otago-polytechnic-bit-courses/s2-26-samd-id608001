@@ -11,21 +11,38 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+384=vsdzqd2@vp0c)s(v8wd50t$7mr@a&5m8z$#q)dsy*stt$'
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DJANGO_DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+
+CORS_ALLOWED_ORIGINS = env.list(
+    "DJANGO_CORS_ALLOWED_ORIGINS",
+    default=["http://localhost:8081"],
+)
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=env.int("SIMPLE_JWT_ACCESS_TOKEN_LIFETIME_SECONDS", 300)),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=env.int("SIMPLE_JWT_REFRESH_TOKEN_LIFETIME_DAYS", 1)),
+}
 
 
 # Application definition
@@ -37,9 +54,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
+    'rest_framework',
+    'accounts'
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
