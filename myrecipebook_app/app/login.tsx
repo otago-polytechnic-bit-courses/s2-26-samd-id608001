@@ -14,7 +14,7 @@ export default function LoginScreen() {
     login(username, password).then(() => {
       setLoading(false);
       router.push({
-        pathname: '/studios'
+        pathname: '/recipes'
       });
     }).catch((error) => {
       setLoading(false);

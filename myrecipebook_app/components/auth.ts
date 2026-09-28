@@ -3,12 +3,12 @@ import * as SecureStore from "expo-secure-store";
 const ACCESS_KEY = "myrecipebook.access";
 const ACCESS_EXPIRY_KEY = "myrecipebook.access_expiry";
 const REFRESH_KEY = "myrecipebook.refresh";
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://10.0.2.2:8000/api";
 
 interface Token {
     access: string,
-    access_expiry: string,
     refresh: string,
+    access_expiry: string,
 }
 
 export async function saveToken(token: Token): Promise<void> {
