@@ -22,6 +22,6 @@ class LoginView(TokenObtainPairView):
             lifetime = settings.SIMPLE_JWT.get('ACCESS_TOKEN_LIFETIME')
             
             expiry_timestamp = datetime.now() + lifetime
-            response.data['access_expiration'] = expiry_timestamp.isoformat()
+            response.data['access_expiry'] = expiry_timestamp.isoformat()
             
         return response
