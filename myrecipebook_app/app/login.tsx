@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Text, ActivityIndicator, StyleSheet, TextInput, Button, View } from "react-native";
-import { login } from "../components/auth";
+import { Text, ActivityIndicator, StyleSheet, TextInput, Button, View, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+import { useAuth } from "../contexts/AuthContext";
 
-export default function LoginScreen() {
+export default function LoginScreen() {  
+  const { login } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [username, setUsername] = useState('');
@@ -23,40 +24,52 @@ export default function LoginScreen() {
   };
 
   if (loading) {
-    return <View style={styles.container}><ActivityIndicator /></View>;
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to continue</Text>
-        </View>
+    <View className="flex-1 justify-center bg-white px-6">
+      <View className="mb-8">
+        <Text className="text-3xl font-bold text-neutral-900 mb-2">Welcome Back</Text>
+        <Text className="text-base text-neutral-500">Sign in to continue</Text>
+      </View>
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="username"
-            placeholderTextColor="#999"
-            value={username}
-            onChangeText={setUsername}
-          />
+      <View className="mb-6">
+        <Text className="text-sm font-medium text-neutral-800 mb-2">Username</Text>
+        <TextInput
+          className="h-[50px] border border-neutral-200 rounded-lg px-4 text-base text-neutral-900 mb-4 bg-neutral-50"
+          placeholder="username"
+          placeholderTextColor="#999"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
 
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="password"
-            placeholderTextColor="#999"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-          />
+        <Text className="text-sm font-medium text-neutral-800 mb-2">Password</Text>
+        <TextInput
+          className="h-[50px] border border-neutral-200 rounded-lg px-4 text-base text-neutral-900 mb-4 bg-neutral-50"
+          placeholder="password"
+          placeholderTextColor="#999"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+          autoCapitalize="none"
+        />
 
-          <Text style={styles.error}>{error}</Text>
-          <Button title="Log in" onPress={handleLogin}></Button>
-        </View>
-
+        {error && <Text className="text-base text-red-500 mb-3">{error}</Text>}
+        
+        {/* Custom styled button to replace the generic React Native <Button /> */}
+        <TouchableOpacity 
+          onPress={handleLogin}
+          className="bg-blue-600 h-[50px] rounded-lg items-center justify-center mt-2 active:bg-blue-700"
+        >
+          <Text className="text-white text-base font-semibold">Log in</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
