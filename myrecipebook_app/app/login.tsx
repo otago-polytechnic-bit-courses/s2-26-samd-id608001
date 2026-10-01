@@ -1,122 +1,131 @@
-import { useState } from "react";
-import { Text, ActivityIndicator, StyleSheet, TextInput, Button, View, TouchableOpacity } from "react-native";
-import { router } from "expo-router";
+import { useState, useEffect  } from "react";
+import { Text, ActivityIndicator, TextInput, View, TouchableOpacity } from "react-native";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginScreen() {  
-  const { login } = useAuth();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { login, setIsLoading, isLoading } = useAuth();
+  const { registered, initialUsername } = useLocalSearchParams<{ 
+    registered?: string; 
+    initialUsername?: string; 
+  }>();
   const [error, setError] = useState<string | null>(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    if (initialUsername) {
+      setUsername(initialUsername);
+    }
+  }, [initialUsername]);
+
   const handleLogin = () => {
-    setLoading(true);
     login(username, password).then(() => {
-      setLoading(false);
+      setIsLoading(false);
       router.push({
         pathname: '/recipes'
       });
     }).catch((error) => {
-      setLoading(false);
+      setIsLoading(false);
       setError(String(error));
     });
   };
 
-  if (loading) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+  const handleRegisterNavigation = () => {
+    router.push({ pathname: '/register' });
+  };
 
   return (
-    <View className="flex-1 justify-center bg-white px-6">
-      <View className="mb-8">
-        <Text className="text-3xl font-bold text-neutral-900 mb-2">Welcome Back</Text>
-        <Text className="text-base text-neutral-500">Sign in to continue</Text>
+    <View className="flex-1 justify-center items-center bg-neutral-50 px-6">
+      <Stack.Screen options={{ headerShown: false }} />
+      
+      {/* Container to center and constrain width on larger tablet screens */}
+      <View className="w-full max-w-md md:max-w-xl">
+
+        {/* --- Responsive Bordered Login Card --- */}
+        <View className="bg-white border border-neutral-200/80 rounded-2xl p-6 shadow-sm shadow-neutral-200 w-full">
+
+          <View className="mb-6 px-2">
+            <Text className="text-3xl font-bold text-neutral-900 mb-2">Welcome Back</Text>
+            <Text className="text-base text-neutral-500">Log in to continue</Text>
+          </View>
+
+          {registered === 'true' && (
+            <View className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-5 mx-1">
+              <Text className="text-emerald-800 font-semibold text-base mb-1">
+                🎉 Registration Successful!
+              </Text>
+              <Text className="text-emerald-600 text-sm">
+                Your account has been created. Please log in below to continue.
+              </Text>
+            </View>
+          )}
+
+          <View className="mb-4">
+            <Text className="text-sm font-medium text-neutral-800 mb-2">Username</Text>
+            <TextInput
+              className="h-12 border border-neutral-200 rounded-lg px-4 text-base text-neutral-900 bg-neutral-50"
+              placeholder="username"
+              placeholderTextColor="#999"
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+              editable={!isLoading}
+            />
+          </View>
+
+          <View className="mb-4">
+            <Text className="text-sm font-medium text-neutral-800 mb-2">Password</Text>
+            <TextInput
+              className="h-12 border border-neutral-200 rounded-lg px-4 text-base text-neutral-900 bg-neutral-50"
+              placeholder="password"
+              placeholderTextColor="#999"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
+              autoCapitalize="none"
+              editable={!isLoading}
+            />
+          </View>
+
+          {error && <Text className="text-sm font-medium text-red-500 mb-4">{error}</Text>}
+          
+          {/* --- Dual Button Row Layout --- */}
+          <View className="flex-row items-center justify-between mt-2 gap-x-4">
+            
+            {/* Secondary Registration Link Button */}
+            <TouchableOpacity 
+              onPress={handleRegisterNavigation}
+              disabled={isLoading}
+              className="flex-1 h-12 rounded-lg items-center justify-center bg-transparent border border-neutral-200 active:bg-neutral-100"
+            >
+              <Text className="text-neutral-600 text-base font-medium">Register</Text>
+            </TouchableOpacity>
+
+            {/* Primary Login Submission Button */}
+            <TouchableOpacity 
+              onPress={handleLogin}
+              disabled={isLoading}
+              className={`flex-1 h-12 rounded-lg items-center justify-center ${isLoading ? 'bg-blue-400' : 'bg-blue-600 active:bg-blue-700'}`}
+            >
+              <Text className="text-white text-base font-semibold">Log in</Text>
+            </TouchableOpacity>
+
+          </View>
+        </View>
+        {/* --- End of Login Card --- */}
+
       </View>
 
-      <View className="mb-6">
-        <Text className="text-sm font-medium text-neutral-800 mb-2">Username</Text>
-        <TextInput
-          className="h-[50px] border border-neutral-200 rounded-lg px-4 text-base text-neutral-900 mb-4 bg-neutral-50"
-          placeholder="username"
-          placeholderTextColor="#999"
-          value={username}
-          onChangeText={setUsername}
-          autoCapitalize="none"
-        />
-
-        <Text className="text-sm font-medium text-neutral-800 mb-2">Password</Text>
-        <TextInput
-          className="h-[50px] border border-neutral-200 rounded-lg px-4 text-base text-neutral-900 mb-4 bg-neutral-50"
-          placeholder="password"
-          placeholderTextColor="#999"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-          autoCapitalize="none"
-        />
-
-        {error && <Text className="text-base text-red-500 mb-3">{error}</Text>}
-        
-        {/* Custom styled button to replace the generic React Native <Button /> */}
-        <TouchableOpacity 
-          onPress={handleLogin}
-          className="bg-blue-600 h-[50px] rounded-lg items-center justify-center mt-2 active:bg-blue-700"
-        >
-          <Text className="text-white text-base font-semibold">Log in</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Full-screen loading overlay */}
+      {isLoading && (
+        <View className="absolute inset-0 bg-black/30 items-center justify-center z-50">
+          <View className="bg-white p-6 rounded-xl shadow-lg items-center justify-center">
+            <ActivityIndicator size="large" color="#2563eb" />
+            <Text className="mt-3 text-sm font-medium text-neutral-600">Logging you in...</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  headerContainer: {
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#1a1a1a',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-  },
-  error: {
-    fontSize: 16,
-    color: 'red',
-    marginBottom: 12,
-  },
-  formContainer: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
-    marginBottom: 8,
-  },
-  input: {
-    height: 50,
-    borderColor: '#e0e0e0',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#1a1a1a',
-    marginBottom: 16,
-    backgroundColor: '#f9f9f9',
-  },
-});
