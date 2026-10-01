@@ -9,12 +9,15 @@ import {
     getToken,
     clearToken,
     login as loginRequest,
+    register as registerRequest,
 } from "../components/auth";
 
 interface AuthContextValue {
     token: string | null;
     isLoading: boolean;
+    setIsLoading: (value: boolean) => void;
     login: (username: string, password: string) => Promise<void>;
+    register: (username: string, password: string, confirmPassword: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -32,8 +35,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     async function login(username: string, password: string): Promise<void> {
+        if (!username || username.length === 0) throw new Error("Please enter a username!");
+        if (!password || password.length === 0) throw new Error("Please enter a password!");
+        setIsLoading(true);
         await loginRequest(username, password);
         setToken(await getToken());
+    }
+
+    async function register(username: string, password: string, confirmPassword: string): Promise<void> {
+        if (!username || username.length === 0)
+            throw { username: ["Please enter a username!"] };
+        if (!password || password.length === 0)
+            throw { password: ["Please enter a password!"] };
+        if (!confirmPassword || confirmPassword.length === 0)
+            throw { confirmPassword: ["Please confirm your password."] };
+        if (password !== confirmPassword)
+            throw { confirmPassword: ["Passwords do not match."] };
+
+        setIsLoading(true);
+        await registerRequest(username, password);
     }
 
     async function logout(): Promise<void> {
@@ -42,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ token, isLoading, login, logout }}>
+        <AuthContext.Provider value={{ token, isLoading, setIsLoading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
