@@ -60,3 +60,17 @@ export async function login(username: string, password: string): Promise<void> {
   const data: Token = await response.json();
   await saveToken(data);
 }
+
+export async function register(username: string, password: string): Promise<void> {
+  const response = await fetch(`${BASE_URL}/auth/register/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw data;
+  }
+}
