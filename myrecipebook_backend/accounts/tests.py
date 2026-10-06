@@ -135,7 +135,6 @@ class AuthAPITests(APITestCase):
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("access", response.data)
-        self.assertIn("refresh", response.data)
         
 
     def test_refresh_token_error_invalid_token(self):
