@@ -6,13 +6,7 @@ import {
   ScrollView,
 } from 'react-native';
 import IngredientInline from './IngredientInline';
-
-interface Ingredient {
-  id: string;
-  amount: string;
-  measurement: string;
-  name: string;
-}
+import { Ingredient } from './lib/recipesApi';
 
 interface RecipeFormProps {
   title: string;

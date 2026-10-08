@@ -1,13 +1,7 @@
 import { useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-
-interface Ingredient {
-  id: string;
-  amount: string;
-  measurement: string;
-  name: string;
-}
+import { Ingredient } from './lib/recipesApi';
 
 interface IngredientInlineProps {
   ingredient: Ingredient;
