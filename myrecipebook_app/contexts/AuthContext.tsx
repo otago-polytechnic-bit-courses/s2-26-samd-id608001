@@ -7,6 +7,7 @@ import {
 } from 'react';
 import {
   getToken,
+  getValidToken,
   clearToken,
   login as loginRequest,
   register as registerRequest,
@@ -14,6 +15,7 @@ import {
 
 interface AuthContextValue {
   token: string | null;
+  isAuthenticated: boolean;
   isLoading: boolean;
   setIsLoading: (value: boolean) => void;
   login: (username: string, password: string) => Promise<void>;
@@ -29,13 +31,21 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    getToken().then(stored => {
-      setToken(stored);
-      setIsLoading(false);
-    });
+    getValidToken()
+      .then(stored => {
+        setToken(stored);
+        if (stored === null) setIsAuthenticated(false);
+        else setIsAuthenticated(true);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      });
   }, []);
 
   async function login(username: string, password: string): Promise<void> {
@@ -69,11 +79,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function logout(): Promise<void> {
     await clearToken();
     setToken(null);
+    setIsAuthenticated(false);
   }
 
   return (
     <AuthContext.Provider
-      value={{ token, isLoading, setIsLoading, login, register, logout }}>
+      value={{
+        token,
+        isAuthenticated,
+        isLoading,
+        setIsLoading,
+        login,
+        register,
+        logout,
+      }}>
       {children}
     </AuthContext.Provider>
   );
