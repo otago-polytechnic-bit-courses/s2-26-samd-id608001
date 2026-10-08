@@ -69,6 +69,8 @@ export async function refreshToken(): Promise<string | null> {
 
 export async function clearToken(): Promise<void> {
   await SecureStore.deleteItemAsync(ACCESS_KEY);
+  await SecureStore.deleteItemAsync(REFRESH_KEY);
+  await SecureStore.deleteItemAsync(ACCESS_EXPIRY_KEY);
 }
 
 export async function login(username: string, password: string): Promise<void> {
