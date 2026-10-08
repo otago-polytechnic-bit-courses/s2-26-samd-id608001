@@ -21,6 +21,31 @@ export async function getToken(): Promise<string | null> {
   return SecureStore.getItemAsync(ACCESS_KEY);
 }
 
+export async function isTokenValid(): Promise<boolean> {
+  const access_expiry: string | null =
+    await SecureStore.getItemAsync(ACCESS_EXPIRY_KEY);
+  if (access_expiry !== null) {
+    // Consider the token expired 30 seconds early to handle network latency
+    const expirationBuffer = 30 * 1000;
+    const expiryTime: number =
+      new Date(access_expiry).getTime() - expirationBuffer;
+    const currentTime: number = Date.now();
+    if (currentTime < expiryTime)
+      // Token is still valid return it
+      return true;
+    else
+      // Token is invalid refresh it
+      return false;
+  } else
+    // No token stored, consider it invalid
+    return false;
+}
+
+export async function getValidToken(): Promise<string | null> {
+  if (await isTokenValid()) return getToken();
+  else return refreshToken();
+}
+
 export async function getRefreshToken(): Promise<string | null> {
   return SecureStore.getItemAsync(REFRESH_KEY);
 }
