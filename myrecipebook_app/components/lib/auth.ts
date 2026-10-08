@@ -1,14 +1,14 @@
-import * as SecureStore from "expo-secure-store";
+import * as SecureStore from 'expo-secure-store';
 
-const ACCESS_KEY = "myrecipebook.access";
-const ACCESS_EXPIRY_KEY = "myrecipebook.access_expiry";
-const REFRESH_KEY = "myrecipebook.refresh";
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://10.0.2.2:8000/api";
+const ACCESS_KEY = 'myrecipebook.access';
+const ACCESS_EXPIRY_KEY = 'myrecipebook.access_expiry';
+const REFRESH_KEY = 'myrecipebook.refresh';
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://10.0.2.2:8000/api';
 
 interface Token {
-    access: string,
-    refresh: string,
-    access_expiry: string,
+  access: string;
+  refresh: string;
+  access_expiry: string;
 }
 
 export async function saveToken(token: Token): Promise<void> {
@@ -28,13 +28,13 @@ export async function getRefreshToken(): Promise<string | null> {
 export async function refreshToken(): Promise<string | null> {
   const refreshToken = await getRefreshToken();
   const response = await fetch(`${BASE_URL}/auth/login/refresh/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ refreshToken }),
   });
 
   if (!response.ok) {
-    throw new Error("Invalid refresh token");
+    throw new Error('Invalid refresh token');
   }
 
   const data: Token = await response.json();
@@ -48,23 +48,26 @@ export async function clearToken(): Promise<void> {
 
 export async function login(username: string, password: string): Promise<void> {
   const response = await fetch(`${BASE_URL}/auth/login/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
   });
 
   if (!response.ok) {
-    throw new Error("Invalid username or password");
+    throw new Error('Invalid username or password');
   }
 
   const data: Token = await response.json();
   await saveToken(data);
 }
 
-export async function register(username: string, password: string): Promise<void> {
+export async function register(
+  username: string,
+  password: string,
+): Promise<void> {
   const response = await fetch(`${BASE_URL}/auth/register/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
   });
 
