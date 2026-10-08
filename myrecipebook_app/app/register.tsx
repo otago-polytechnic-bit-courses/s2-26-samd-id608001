@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
 import { LoadingOverlay } from '../components/LoadingOverlay';
@@ -20,9 +15,9 @@ interface ValidationErrorState {
 export default function RegisterScreen() {
   const { register, setIsLoading, isLoading } = useAuth();
   const [errors, setErrors] = useState<ValidationErrorState | null>(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const handleRegister = () => {
     setErrors(null);
