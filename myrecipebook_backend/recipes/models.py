@@ -16,11 +16,12 @@ class Recipe(models.Model):
 
 class Ingredient(models.Model):
     class Measurements(models.TextChoices):
+        CUP = "cup", "Cup"
+        WHOLE = "whole", "Whole"
+        GRAMS = "grams", "g"
+        MILLILITRE = "millilitre", "ml"
         TEASPOON = "teaspoon", "tsp"
         TABLESPOON = "tablespoon", "Tbsp"
-        CUP = "cup", "Cup"
-        MILLILITRE = "millilitre", "ml"
-        GRAM = "gram", "g"
 
     recipe = models.ForeignKey(
         Recipe,
