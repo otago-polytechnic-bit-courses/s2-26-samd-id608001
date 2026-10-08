@@ -10,7 +10,7 @@ import {
     clearToken,
     login as loginRequest,
     register as registerRequest,
-} from "../components/auth";
+} from "../components/lib/auth";
 
 interface AuthContextValue {
     token: string | null;
