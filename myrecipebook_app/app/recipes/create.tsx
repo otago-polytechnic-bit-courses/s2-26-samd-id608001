@@ -4,13 +4,7 @@ import { router, Stack } from 'expo-router';
 import { LoadingOverlay } from '../../components/LoadingOverlay';
 import RecipeForm from '../../components/RecipeForm';
 import { randomUUID } from 'expo-crypto';
-
-interface Ingredient {
-  id: string;
-  amount: string;
-  measurement: string;
-  name: string;
-}
+import { Ingredient } from '../../components/lib/recipesApi';
 
 export default function CreateRecipeScreen() {
   const [isLoading, setIsLoading] = useState<boolean>();
