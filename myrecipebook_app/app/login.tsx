@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,14 +11,8 @@ export default function LoginScreen() {
     initialUsername?: string;
   }>();
   const [error, setError] = useState<string | null>(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    if (initialUsername) {
-      setUsername(initialUsername);
-    }
-  }, [initialUsername]);
+  const [username, setUsername] = useState<string>(initialUsername ?? '');
+  const [password, setPassword] = useState<string>('');
 
   const handleLogin = () => {
     login(username, password)
