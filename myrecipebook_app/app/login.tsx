@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Text, TextInput, View, TouchableOpacity } from 'react-native';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Redirect, router, Stack, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
 import { LoadingOverlay } from '../components/LoadingOverlay';
 
 export default function LoginScreen() {
-  const { login, setIsLoading, isLoading } = useAuth();
+  const { login, setIsLoading, isLoading, isAuthenticated } = useAuth();
   const { registered, initialUsername } = useLocalSearchParams<{
     registered?: string;
     initialUsername?: string;
@@ -31,6 +31,8 @@ export default function LoginScreen() {
   const handleRegisterNavigation = () => {
     router.push({ pathname: '/register' });
   };
+
+  if (isAuthenticated) return <Redirect href="/recipes" />;
 
   return (
     <View className="flex-1 justify-center items-center bg-neutral-50 px-6">
