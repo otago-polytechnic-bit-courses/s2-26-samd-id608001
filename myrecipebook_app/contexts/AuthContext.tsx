@@ -6,15 +6,13 @@ import {
   ReactNode,
 } from 'react';
 import {
-  getToken,
-  getValidToken,
+  isTokenValid,
   clearToken,
   login as loginRequest,
   register as registerRequest,
 } from '../components/lib/auth';
 
 interface AuthContextValue {
-  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   setIsLoading: (value: boolean) => void;
@@ -30,20 +28,18 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    getValidToken()
-      .then(stored => {
-        setToken(stored);
-        if (stored === null) setIsAuthenticated(false);
-        else setIsAuthenticated(true);
-        setIsLoading(false);
+    isTokenValid()
+      .then(valid => {
+        setIsAuthenticated(valid);
       })
       .catch(() => {
         setIsAuthenticated(false);
+      })
+      .finally(() =>{
         setIsLoading(false);
       });
   }, []);
@@ -55,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('Please enter a password!');
     setIsLoading(true);
     await loginRequest(username, password);
-    setToken(await getToken());
+    setIsAuthenticated(true);
   }
 
   async function register(
@@ -78,14 +74,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function logout(): Promise<void> {
     await clearToken();
-    setToken(null);
     setIsAuthenticated(false);
   }
 
   return (
     <AuthContext.Provider
       value={{
-        token,
         isAuthenticated,
         isLoading,
         setIsLoading,
