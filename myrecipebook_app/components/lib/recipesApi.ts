@@ -20,10 +20,10 @@ async function apiFetch(
 }
 
 export interface Ingredient {
-  id: string | number; //TODO fix frontend using text vs backend using number
-  amount: string | number; //TODO fix frontend using text vs backend using number
+  id: number;
+  amount: number;
   measurement: string;
-  name: string;
+  ingredient_name: string;
 }
 
 export interface Recipe {
@@ -33,6 +33,37 @@ export interface Recipe {
   description: string;
   method: string;
   ingredients: Ingredient[];
+}
+
+export interface DraftIngredient {
+  id?: string | number; // Allows UUIDs for unsubmitted items 
+  amount: string | number;      // Allows fluid text input
+  measurement: string;
+  ingredient_name: string;
+}
+
+export interface DraftRecipe {
+  id?: number;
+  title: string;
+  description: string;
+  method: string;
+  ingredients: Omit<DraftIngredient, 'id'>[];
+}
+
+export interface IngredientValidationError {
+  amount?: string[];
+  measurement?: string[];
+  ingredient_name?: string[];
+}
+
+export interface RecipeValidationErrorState {
+  title?: string[];
+  description?: string[];
+  method?: string[];
+  ingredients?: {
+    [index: string]: IngredientValidationError; // Handles "0", "1", etc.
+  } | string[]; // Handles top-level list errors like "This list may not be empty"
+  non_field_errors?: string[];
 }
 
 export async function getRecipe(
@@ -60,7 +91,7 @@ export async function getRecipes(token: string): Promise<Recipe[]> {
 
 export async function createRecipe(
   token: string,
-  recipe: Omit<Recipe, 'id'>,
+  recipe: DraftRecipe,
 ): Promise<Recipe> {
   const response = await apiFetch(token, '/recipes/', {
     method: 'POST',
@@ -68,7 +99,11 @@ export async function createRecipe(
   });
 
   if (!response.ok) {
-    throw new Error('Could not create recipe');
+    const errorData = await response.json();
+
+    if (errorData.detail) errorData.non_field_errors = [`An unexpected error occurred: ${errorData.detail}`];
+    
+    throw errorData;
   }
 
   return response.json();
@@ -76,7 +111,7 @@ export async function createRecipe(
 
 export async function updateRecipe(
   token: string,
-  recipe: Recipe,
+  recipe: DraftRecipe,
 ): Promise<Recipe> {
   const response = await apiFetch(token, `/recipes/${recipe.id}`, {
     method: 'PUT',
