@@ -1,10 +1,12 @@
+import { getValidToken } from './auth';
+
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://10.0.2.2:8000/api';
 
 async function apiFetch(
-  token: string,
   path: string,
   options: RequestInit = {},
 ): Promise<Response> {
+  const token = await getValidToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
@@ -36,8 +38,8 @@ export interface Recipe {
 }
 
 export interface DraftIngredient {
-  id?: string | number; // Allows UUIDs for unsubmitted items 
-  amount: string | number;      // Allows fluid text input
+  id?: string | number; // Allows UUIDs for unsubmitted items
+  amount: string | number; // Allows fluid text input
   measurement: string;
   ingredient_name: string;
 }
@@ -66,11 +68,8 @@ export interface RecipeValidationErrorState {
   non_field_errors?: string[];
 }
 
-export async function getRecipe(
-  token: string,
-  recipeID: number,
-): Promise<Recipe> {
-  const response = await apiFetch(token, `/recipes/${recipeID}`);
+export async function getRecipe(recipeID: number): Promise<Recipe> {
+  const response = await apiFetch(`/recipes/${recipeID}`);
 
   if (!response.ok) {
     throw new Error('Could not load recipes');
@@ -79,8 +78,8 @@ export async function getRecipe(
   return response.json();
 }
 
-export async function getRecipes(token: string): Promise<Recipe[]> {
-  const response = await apiFetch(token, '/recipes/');
+export async function getRecipes(): Promise<Recipe[]> {
+  const response = await apiFetch('/recipes/');
 
   if (!response.ok) {
     throw new Error('Could not load recipes');
@@ -89,11 +88,8 @@ export async function getRecipes(token: string): Promise<Recipe[]> {
   return response.json();
 }
 
-export async function createRecipe(
-  token: string,
-  recipe: DraftRecipe,
-): Promise<Recipe> {
-  const response = await apiFetch(token, '/recipes/', {
+export async function createRecipe(recipe: DraftRecipe): Promise<Recipe> {
+  const response = await apiFetch('/recipes/', {
     method: 'POST',
     body: JSON.stringify(recipe),
   });
@@ -109,11 +105,8 @@ export async function createRecipe(
   return response.json();
 }
 
-export async function updateRecipe(
-  token: string,
-  recipe: DraftRecipe,
-): Promise<Recipe> {
-  const response = await apiFetch(token, `/recipes/${recipe.id}`, {
+export async function updateRecipe(recipe: DraftRecipe): Promise<Recipe> {
+  const response = await apiFetch(`/recipes/${recipe.id}`, {
     method: 'PUT',
     body: JSON.stringify(recipe),
   });
@@ -125,11 +118,8 @@ export async function updateRecipe(
   return response.json();
 }
 
-export async function deleteRecipe(
-  token: string,
-  recipeID: number,
-): Promise<void> {
-  const response = await apiFetch(token, `/recipes/${recipeID}`, {
+export async function deleteRecipe(recipeID: number): Promise<void> {
+  const response = await apiFetch(`/recipes/${recipeID}`, {
     method: 'DELETE',
   });
 
