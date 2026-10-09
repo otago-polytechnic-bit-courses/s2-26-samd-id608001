@@ -1,45 +1,59 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { LoadingOverlay } from '../../components/LoadingOverlay';
 import RecipeForm from '../../components/RecipeForm';
 import { randomUUID } from 'expo-crypto';
-import { Ingredient } from '../../components/lib/recipesApi';
+import { createRecipe, DraftIngredient, DraftRecipe, RecipeValidationErrorState } from '../../components/lib/recipesApi';
+import { useAuth } from '../../contexts/AuthContext';
+
 
 export default function CreateRecipeScreen() {
+  const { token } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>();
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [method, setMethod] = useState<string>('');
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: randomUUID(), amount: '', measurement: '', name: '' },
+  const [ingredients, setIngredients] = useState<DraftIngredient[]>([
+    { id: randomUUID(), amount: '', measurement: '', ingredient_name: '' },
   ]);
 
   // State for surfacing validation errors from the backend
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<RecipeValidationErrorState | null>(null);
 
   const handleAddIngredient = () => {
     setIngredients([
       ...ingredients,
-      { id: randomUUID(), amount: '', measurement: '', name: '' },
+      { id: randomUUID(), amount: '', measurement: '', ingredient_name: '' },
     ]);
   };
 
   const handleCreate = async () => {
     setIsLoading(true);
-    const payload = {
+    setErrors(null);
+
+    const payload: DraftRecipe = {
       title,
       description,
       method,
-      ingredients: ingredients.map(({ amount, measurement, name }) => ({
-        amount: parseFloat(amount),
+      ingredients: ingredients.map(({ amount, measurement, ingredient_name }) => ({
+        amount: Number(amount) || 0,
         measurement,
-        name,
+        ingredient_name,
       })),
     };
-    // TODO placeholder create function
-    setIsLoading(false);
-    Alert.alert('Error', 'Failed to connect to the server.');
+    try {
+      await createRecipe(token || "", payload);
+      //TODO implement "recipe created" alert
+      router.back();
+    } catch (err: any) {
+      if (err && typeof err === 'object')
+        setErrors(err);
+      else
+        setErrors({ non_field_errors: [String(err)] });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -56,6 +70,7 @@ export default function CreateRecipeScreen() {
         ingredients={ingredients}
         setIngredients={setIngredients}
         handleAddIngredient={handleAddIngredient}
+        errors={errors}
       />
 
       {/* Footer Actions */}
