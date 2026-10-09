@@ -7,14 +7,15 @@ const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://10.0.2.2:8000/api';
 
 interface Token {
   access: string;
-  refresh: string;
+  refresh?: string;
   access_expiry: string;
 }
 
 export async function saveToken(token: Token): Promise<void> {
   await SecureStore.setItemAsync(ACCESS_KEY, token.access);
   await SecureStore.setItemAsync(ACCESS_EXPIRY_KEY, token.access_expiry);
-  await SecureStore.setItemAsync(REFRESH_KEY, token.refresh);
+  if (token.refresh)
+    await SecureStore.setItemAsync(REFRESH_KEY, token.refresh);
 }
 
 export async function getToken(): Promise<string | null> {
@@ -51,15 +52,17 @@ export async function getRefreshToken(): Promise<string | null> {
 }
 
 export async function refreshToken(): Promise<string | null> {
-  const refreshToken = await getRefreshToken();
+  const refresh = await getRefreshToken();
+  if (!refresh) return null;
   const response = await fetch(`${BASE_URL}/auth/login/refresh/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refreshToken }),
+    body: JSON.stringify({ refresh }),
   });
 
   if (!response.ok) {
-    throw new Error('Invalid refresh token');
+    await clearToken(); // Clear storage on invalid/expired refresh token
+    return null;
   }
 
   const data: Token = await response.json();
