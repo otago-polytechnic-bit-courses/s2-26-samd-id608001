@@ -5,7 +5,11 @@ import { DraftIngredient, IngredientValidationError } from './lib/recipesApi';
 
 interface IngredientInlineProps {
   ingredient: DraftIngredient;
-  updateIngredient: (id: string | number | undefined, field: keyof DraftIngredient, value: string) => void;
+  updateIngredient: (
+    id: string | number | undefined,
+    field: keyof DraftIngredient,
+    value: string,
+  ) => void;
   handleRemoveIngredient: (id: string | number | undefined) => void;
   showRemove: boolean;
   errors?: IngredientValidationError;
@@ -33,7 +37,9 @@ export default function IngredientInline({
           onChangeText={val => updateIngredient(ingredient.id, 'amount', val)}
         />
         {errors?.amount?.map((msg, idx) => (
-          <Text key={idx} className="text-[10px] font-medium text-red-500 mt-0.5 pl-0.5">
+          <Text
+            key={idx}
+            className="text-[10px] font-medium text-red-500 mt-0.5 pl-0.5">
             {msg}
           </Text>
         ))}
@@ -45,7 +51,9 @@ export default function IngredientInline({
           activeOpacity={0.7}
           onPress={() => dropdownRef.current?.open()}
           className={`border rounded-lg h-[38px] justify-center ${
-            errors?.measurement ? 'border-red-400 bg-red-50/20' : 'border-gray-400'
+            errors?.measurement
+              ? 'border-red-400 bg-red-50/20'
+              : 'border-gray-400'
           }`}>
           <Dropdown
             ref={dropdownRef}
@@ -67,11 +75,15 @@ export default function IngredientInline({
             valueField="value"
             placeholder="Cup"
             value={ingredient.measurement}
-            onChange={item => updateIngredient(ingredient.id, 'measurement', item.value)}
+            onChange={item =>
+              updateIngredient(ingredient.id, 'measurement', item.value)
+            }
           />
         </TouchableOpacity>
         {errors?.measurement?.map((msg, idx) => (
-          <Text key={idx} className="text-[10px] font-medium text-red-500 mt-0.5 pl-0.5">
+          <Text
+            key={idx}
+            className="text-[10px] font-medium text-red-500 mt-0.5 pl-0.5">
             {msg}
           </Text>
         ))}
@@ -81,14 +93,20 @@ export default function IngredientInline({
       <View className="flex-[0.5] ml-2">
         <TextInput
           className={`border rounded-lg p-2 text-base text-gray-900 ${
-            errors?.ingredient_name ? 'border-red-400 bg-red-50/20' : 'border-gray-400'
+            errors?.ingredient_name
+              ? 'border-red-400 bg-red-50/20'
+              : 'border-gray-400'
           }`}
           placeholder="Flour"
           value={ingredient.ingredient_name}
-          onChangeText={val => updateIngredient(ingredient.id, 'ingredient_name', val)}
+          onChangeText={val =>
+            updateIngredient(ingredient.id, 'ingredient_name', val)
+          }
         />
         {errors?.ingredient_name?.map((msg, idx) => (
-          <Text key={idx} className="text-[10px] font-medium text-red-500 mt-0.5 pl-0.5">
+          <Text
+            key={idx}
+            className="text-[10px] font-medium text-red-500 mt-0.5 pl-0.5">
             {msg}
           </Text>
         ))}
@@ -98,7 +116,9 @@ export default function IngredientInline({
       <TouchableOpacity
         onPress={() => handleRemoveIngredient(ingredient.id)}
         className="w-8 h-[38px] items-center justify-center ml-1">
-        {showRemove && <Text className="text-lg text-gray-500 font-bold">x</Text>}
+        {showRemove && (
+          <Text className="text-lg text-gray-500 font-bold">x</Text>
+        )}
       </TouchableOpacity>
     </View>
   );

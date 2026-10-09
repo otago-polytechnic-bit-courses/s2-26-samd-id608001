@@ -31,13 +31,17 @@ export default function RecipeForm({
   ingredients,
   setIngredients,
   handleAddIngredient,
-  errors
+  errors,
 }: RecipeFormProps) {
   const handleRemoveIngredient = (id: string | number | undefined) => {
     setIngredients(ingredients.filter(item => item.id !== id));
   };
 
-  const updateIngredient = (id: string | number | undefined, field: keyof DraftIngredient, value: string) => {
+  const updateIngredient = (
+    id: string | number | undefined,
+    field: keyof DraftIngredient,
+    value: string,
+  ) => {
     // Enforce positive numbers only for the amount field
     if (field === 'amount') {
       value = value.replace(/[^0-9.]/g, '');
@@ -50,8 +54,10 @@ export default function RecipeForm({
     );
   };
 
-  const generalIngredientErrors = Array.isArray(errors?.ingredients) ? errors.ingredients : null;
-  
+  const generalIngredientErrors = Array.isArray(errors?.ingredients)
+    ? errors.ingredients
+    : null;
+
   return (
     <ScrollView className="flex-1 px-5 pt-4">
       {/* Title Field */}
@@ -65,7 +71,9 @@ export default function RecipeForm({
           onChangeText={setTitle}
         />
         {errors?.title?.map((msg, index) => (
-          <Text key={index} className="text-xs font-medium text-red-500 mt-1 pl-1">
+          <Text
+            key={index}
+            className="text-xs font-medium text-red-500 mt-1 pl-1">
             {msg}
           </Text>
         ))}
@@ -76,7 +84,9 @@ export default function RecipeForm({
       <View className="mb-5">
         <TextInput
           className={`border rounded-lg p-3 text-base text-gray-900 h-28 ${
-            errors?.description ? 'border-red-400 bg-red-50/20' : 'border-gray-400'
+            errors?.description
+              ? 'border-red-400 bg-red-50/20'
+              : 'border-gray-400'
           }`}
           placeholder="Describe your recipe here!"
           multiline
@@ -85,7 +95,9 @@ export default function RecipeForm({
           onChangeText={setDescription}
         />
         {errors?.description?.map((msg, index) => (
-          <Text key={index} className="text-xs font-medium text-red-500 mt-1 pl-1">
+          <Text
+            key={index}
+            className="text-xs font-medium text-red-500 mt-1 pl-1">
             {msg}
           </Text>
         ))}
@@ -95,22 +107,29 @@ export default function RecipeForm({
       <Text className="text-xl font-bold text-gray-800 mb-2">Ingredients</Text>
 
       {generalIngredientErrors?.map((msg, index) => (
-        <Text key={index} className="text-xs font-medium text-red-500 mb-2 pl-1">
+        <Text
+          key={index}
+          className="text-xs font-medium text-red-500 mb-2 pl-1">
           {msg}
         </Text>
       ))}
 
       <View className="flex-row px-1 mb-1">
         <Text className="text-xs text-gray-600 flex-[0.25]">Amount</Text>
-        <Text className="text-xs text-gray-600 flex-[0.35] ml-2">Measurement</Text>
-        <Text className="text-xs text-gray-600 flex-[0.5] ml-2">Ingredient name</Text>
+        <Text className="text-xs text-gray-600 flex-[0.35] ml-2">
+          Measurement
+        </Text>
+        <Text className="text-xs text-gray-600 flex-[0.5] ml-2">
+          Ingredient name
+        </Text>
         <View className="w-8" />
       </View>
 
       {/* Map Ingredients and pass individual row errors by index */}
       {ingredients.map((ingredient, index) => {
         const rowErrors =
-          typeof errors?.ingredients === 'object' && !Array.isArray(errors.ingredients)
+          typeof errors?.ingredients === 'object' &&
+          !Array.isArray(errors.ingredients)
             ? errors.ingredients[index.toString()]
             : undefined;
 
@@ -146,7 +165,9 @@ export default function RecipeForm({
           onChangeText={setMethod}
         />
         {errors?.method?.map((msg, index) => (
-          <Text key={index} className="text-xs font-medium text-red-500 mt-1 pl-1">
+          <Text
+            key={index}
+            className="text-xs font-medium text-red-500 mt-1 pl-1">
             {msg}
           </Text>
         ))}
@@ -154,7 +175,9 @@ export default function RecipeForm({
 
       {/* Global Non-Field Errors */}
       {errors?.non_field_errors?.map((msg, index) => (
-        <Text key={index} className="text-sm font-medium text-red-500 mb-4 text-center">
+        <Text
+          key={index}
+          className="text-sm font-medium text-red-500 mb-4 text-center">
           {msg}
         </Text>
       ))}

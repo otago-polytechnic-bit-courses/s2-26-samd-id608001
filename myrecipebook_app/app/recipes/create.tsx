@@ -4,9 +4,13 @@ import { router, Stack } from 'expo-router';
 import { LoadingOverlay } from '../../components/LoadingOverlay';
 import RecipeForm from '../../components/RecipeForm';
 import { randomUUID } from 'expo-crypto';
-import { createRecipe, DraftIngredient, DraftRecipe, RecipeValidationErrorState } from '../../components/lib/recipesApi';
+import {
+  createRecipe,
+  DraftIngredient,
+  DraftRecipe,
+  RecipeValidationErrorState,
+} from '../../components/lib/recipesApi';
 import { useAuth } from '../../contexts/AuthContext';
-
 
 export default function CreateRecipeScreen() {
   const { token } = useAuth();
@@ -36,21 +40,21 @@ export default function CreateRecipeScreen() {
       title,
       description,
       method,
-      ingredients: ingredients.map(({ amount, measurement, ingredient_name }) => ({
-        amount: Number(amount) || 0,
-        measurement,
-        ingredient_name,
-      })),
+      ingredients: ingredients.map(
+        ({ amount, measurement, ingredient_name }) => ({
+          amount: Number(amount) || 0,
+          measurement,
+          ingredient_name,
+        }),
+      ),
     };
     try {
-      await createRecipe(token || "", payload);
+      await createRecipe(token || '', payload);
       //TODO implement "recipe created" alert
       router.back();
     } catch (err: any) {
-      if (err && typeof err === 'object')
-        setErrors(err);
-      else
-        setErrors({ non_field_errors: [String(err)] });
+      if (err && typeof err === 'object') setErrors(err);
+      else setErrors({ non_field_errors: [String(err)] });
     } finally {
       setIsLoading(false);
     }
