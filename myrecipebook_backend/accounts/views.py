@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from .serializers import RegisterSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -16,12 +16,18 @@ class RegisterView(generics.CreateAPIView):
 # Uses the TokenObtainPairView as a base and only alters the post data
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs) -> Response:
-        response = super().post(request, *args, **kwargs)
+        return append_access_expiry(super().post(request, *args, **kwargs))
+
+# Custom Token Refresh view to add the token expiry to the response
+# Uses the TokenRefreshView as a base and only alters the post data
+class RefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs) -> Response:
+        return append_access_expiry(super().post(request, *args, **kwargs))
+    
+# Helper function to append the access token expiry to the response
+def append_access_expiry(response) -> Response:
+     if response.status_code == 200:
+        lifetime = settings.SIMPLE_JWT.get('ACCESS_TOKEN_LIFETIME')
         
-        if response.status_code == 200:
-            lifetime = settings.SIMPLE_JWT.get('ACCESS_TOKEN_LIFETIME')
-            
-            expiry_timestamp = datetime.now() + lifetime
-            response.data['access_expiry'] = expiry_timestamp.isoformat()
-            
-        return response
+        expiry_timestamp = datetime.now() + lifetime
+        response.data['access_expiry'] = expiry_timestamp.isoformat()
