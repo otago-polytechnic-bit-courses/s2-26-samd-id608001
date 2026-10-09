@@ -10,10 +10,8 @@ import {
   DraftRecipe,
   RecipeValidationErrorState,
 } from '../../components/lib/recipesApi';
-import { useAuth } from '../../contexts/AuthContext';
 
 export default function CreateRecipeScreen() {
-  const { token } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>();
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -49,7 +47,7 @@ export default function CreateRecipeScreen() {
       ),
     };
     try {
-      await createRecipe(token || '', payload);
+      await createRecipe(payload);
       //TODO implement "recipe created" alert
       router.back();
     } catch (err: any) {
