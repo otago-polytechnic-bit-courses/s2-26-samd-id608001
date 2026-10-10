@@ -10,6 +10,7 @@ import {
   DraftRecipe,
   RecipeValidationErrorState,
 } from '../../components/lib/recipesApi';
+import { SuccessOverlay } from '../../components/SuccessOverlay';
 
 export default function CreateRecipeScreen() {
   const [isLoading, setIsLoading] = useState<boolean>();
@@ -19,6 +20,7 @@ export default function CreateRecipeScreen() {
   const [ingredients, setIngredients] = useState<DraftIngredient[]>([
     { id: randomUUID(), amount: '', measurement: '', ingredient_name: '' },
   ]);
+  const [success, setSuccess] = useState<boolean>(false);
 
   // State for surfacing validation errors from the backend
   const [errors, setErrors] = useState<RecipeValidationErrorState | null>(null);
@@ -48,8 +50,7 @@ export default function CreateRecipeScreen() {
     };
     try {
       await createRecipe(payload);
-      //TODO implement "recipe created" alert
-      router.back();
+      setSuccess(true);
     } catch (err: any) {
       if (err && typeof err === 'object') setErrors(err);
       else setErrors({ non_field_errors: [String(err)] });
@@ -72,6 +73,7 @@ export default function CreateRecipeScreen() {
         ingredients={ingredients}
         setIngredients={setIngredients}
         handleAddIngredient={handleAddIngredient}
+        disableInputs={isLoading || success}
         errors={errors}
       />
 
@@ -91,6 +93,8 @@ export default function CreateRecipeScreen() {
       </View>
       {/* Full-screen loading overlay */}
       {isLoading && <LoadingOverlay message="Creating Recipe"></LoadingOverlay>}
+      {/* Full-screen success overlay */}
+      {!isLoading && success && <SuccessOverlay message="Successfully Created Recipe!"/>}
     </View>
   );
 }
