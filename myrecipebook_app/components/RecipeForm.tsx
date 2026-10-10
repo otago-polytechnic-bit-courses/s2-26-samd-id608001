@@ -18,7 +18,7 @@ interface RecipeFormProps {
   ingredients: DraftIngredient[];
   setIngredients: (ingredients: DraftIngredient[]) => void;
   handleAddIngredient: () => void;
-  disableInputs: boolean
+  disableInputs: boolean;
   errors?: RecipeValidationErrorState | null;
 }
 

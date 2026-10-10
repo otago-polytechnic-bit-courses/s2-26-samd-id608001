@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .catch(() => {
         setIsAuthenticated(false);
       })
-      .finally(() =>{
+      .finally(() => {
         setIsLoading(false);
       });
   }, []);

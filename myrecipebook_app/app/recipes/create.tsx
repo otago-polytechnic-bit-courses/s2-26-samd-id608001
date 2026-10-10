@@ -94,7 +94,9 @@ export default function CreateRecipeScreen() {
       {/* Full-screen loading overlay */}
       {isLoading && <LoadingOverlay message="Creating Recipe"></LoadingOverlay>}
       {/* Full-screen success overlay */}
-      {!isLoading && success && <SuccessOverlay message="Successfully Created Recipe!"/>}
+      {!isLoading && success && (
+        <SuccessOverlay message="Successfully Created Recipe!" />
+      )}
     </View>
   );
 }

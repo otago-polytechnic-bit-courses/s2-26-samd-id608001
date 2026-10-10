@@ -62,9 +62,11 @@ export interface RecipeValidationErrorState {
   title?: string[];
   description?: string[];
   method?: string[];
-  ingredients?: {
-    [index: string]: IngredientValidationError; // Handles "0", "1", etc.
-  } | string[]; // Handles top-level list errors like "This list may not be empty"
+  ingredients?:
+    | {
+        [index: string]: IngredientValidationError; // Handles "0", "1", etc.
+      }
+    | string[]; // Handles top-level list errors like "This list may not be empty"
   non_field_errors?: string[];
 }
 
@@ -97,8 +99,11 @@ export async function createRecipe(recipe: DraftRecipe): Promise<Recipe> {
   if (!response.ok) {
     const errorData = await response.json();
 
-    if (errorData.detail) errorData.non_field_errors = [`An unexpected error occurred: ${errorData.detail}`];
-    
+    if (errorData.detail)
+      errorData.non_field_errors = [
+        `An unexpected error occurred: ${errorData.detail}`,
+      ];
+
     throw errorData;
   }
 

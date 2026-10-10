@@ -14,8 +14,7 @@ interface Token {
 export async function saveToken(token: Token): Promise<void> {
   await SecureStore.setItemAsync(ACCESS_KEY, token.access);
   await SecureStore.setItemAsync(ACCESS_EXPIRY_KEY, token.access_expiry);
-  if (token.refresh)
-    await SecureStore.setItemAsync(REFRESH_KEY, token.refresh);
+  if (token.refresh) await SecureStore.setItemAsync(REFRESH_KEY, token.refresh);
 }
 
 export async function getToken(): Promise<string | null> {
