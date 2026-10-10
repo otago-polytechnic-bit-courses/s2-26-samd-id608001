@@ -12,6 +12,7 @@ interface IngredientInlineProps {
   ) => void;
   handleRemoveIngredient: (id: string | number | undefined) => void;
   showRemove: boolean;
+  disableInputs: boolean;
   errors?: IngredientValidationError;
 }
 
@@ -20,6 +21,7 @@ export default function IngredientInline({
   updateIngredient,
   handleRemoveIngredient,
   showRemove,
+  disableInputs,
   errors,
 }: IngredientInlineProps) {
   const dropdownRef = useRef<any>(null);
@@ -35,6 +37,7 @@ export default function IngredientInline({
           keyboardType="decimal-pad"
           value={`${ingredient.amount}`}
           onChangeText={val => updateIngredient(ingredient.id, 'amount', val)}
+          editable={!disableInputs}
         />
         {errors?.amount?.map((msg, idx) => (
           <Text
@@ -78,6 +81,7 @@ export default function IngredientInline({
             onChange={item =>
               updateIngredient(ingredient.id, 'measurement', item.value)
             }
+            disable={disableInputs}
           />
         </TouchableOpacity>
         {errors?.measurement?.map((msg, idx) => (
@@ -102,6 +106,7 @@ export default function IngredientInline({
           onChangeText={val =>
             updateIngredient(ingredient.id, 'ingredient_name', val)
           }
+          editable={!disableInputs}
         />
         {errors?.ingredient_name?.map((msg, idx) => (
           <Text
@@ -116,7 +121,7 @@ export default function IngredientInline({
       <TouchableOpacity
         onPress={() => handleRemoveIngredient(ingredient.id)}
         className="w-8 h-[38px] items-center justify-center ml-1">
-        {showRemove && (
+        {showRemove && !disableInputs && (
           <Text className="text-lg text-gray-500 font-bold">x</Text>
         )}
       </TouchableOpacity>

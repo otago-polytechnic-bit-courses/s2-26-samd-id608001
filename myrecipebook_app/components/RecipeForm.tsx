@@ -18,6 +18,7 @@ interface RecipeFormProps {
   ingredients: DraftIngredient[];
   setIngredients: (ingredients: DraftIngredient[]) => void;
   handleAddIngredient: () => void;
+  disableInputs: boolean
   errors?: RecipeValidationErrorState | null;
 }
 
@@ -31,6 +32,7 @@ export default function RecipeForm({
   ingredients,
   setIngredients,
   handleAddIngredient,
+  disableInputs,
   errors,
 }: RecipeFormProps) {
   const handleRemoveIngredient = (id: string | number | undefined) => {
@@ -69,6 +71,7 @@ export default function RecipeForm({
           placeholder="Recipe Title"
           value={title}
           onChangeText={setTitle}
+          editable={!disableInputs}
         />
         {errors?.title?.map((msg, index) => (
           <Text
@@ -93,6 +96,7 @@ export default function RecipeForm({
           textAlignVertical="top"
           value={description}
           onChangeText={setDescription}
+          editable={!disableInputs}
         />
         {errors?.description?.map((msg, index) => (
           <Text
@@ -140,6 +144,7 @@ export default function RecipeForm({
             updateIngredient={updateIngredient}
             handleRemoveIngredient={handleRemoveIngredient}
             showRemove={ingredients.length > 1}
+            disableInputs={disableInputs}
             errors={rowErrors}
           />
         );
@@ -163,6 +168,7 @@ export default function RecipeForm({
           textAlignVertical="top"
           value={method}
           onChangeText={setMethod}
+          editable={!disableInputs}
         />
         {errors?.method?.map((msg, index) => (
           <Text
