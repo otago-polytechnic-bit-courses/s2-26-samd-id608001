@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 from django.conf import settings
 
 class Recipe(models.Model):
@@ -28,7 +29,9 @@ class Ingredient(models.Model):
         on_delete=models.CASCADE,
         related_name="ingredients",
     )
-    amount = models.PositiveIntegerField()
+    amount = models.FloatField(
+        validators=[MinValueValidator(0.0)]
+    )
     measurement = models.CharField(
         max_length=10,
         choices=Measurements.choices,
