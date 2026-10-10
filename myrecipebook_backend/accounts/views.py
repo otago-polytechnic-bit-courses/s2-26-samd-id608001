@@ -26,8 +26,10 @@ class RefreshView(TokenRefreshView):
     
 # Helper function to append the access token expiry to the response
 def append_access_expiry(response) -> Response:
-     if response.status_code == 200:
-        lifetime = settings.SIMPLE_JWT.get('ACCESS_TOKEN_LIFETIME')
-        
-        expiry_timestamp = datetime.now() + lifetime
-        response.data['access_expiry'] = expiry_timestamp.isoformat()
+    if response.status_code == 200:
+       lifetime = settings.SIMPLE_JWT.get('ACCESS_TOKEN_LIFETIME')
+       
+       expiry_timestamp = datetime.now() + lifetime
+       response.data['access_expiry'] = expiry_timestamp.isoformat()
+    
+    return response
