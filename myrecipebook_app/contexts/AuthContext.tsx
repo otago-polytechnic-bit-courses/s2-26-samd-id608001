@@ -2,8 +2,8 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
+  useCallback,
 } from 'react';
 import {
   isTokenValid,
@@ -11,6 +11,7 @@ import {
   login as loginRequest,
   register as registerRequest,
 } from '../components/lib/auth';
+import { useFocusEffect } from 'expo-router';
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -31,18 +32,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  useEffect(() => {
-    isTokenValid()
-      .then(valid => {
-        setIsAuthenticated(valid);
-      })
-      .catch(() => {
-        setIsAuthenticated(false);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      isTokenValid()
+        .then(valid => {
+          setIsAuthenticated(valid);
+        })
+        .catch(() => {
+          setIsAuthenticated(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }, []),
+  );
 
   async function login(username: string, password: string): Promise<void> {
     if (!username || username.length === 0)
