@@ -1,30 +1,68 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import { useState, useCallback } from 'react';
+import { View, Text, FlatList } from 'react-native';
+import { Stack, router, useFocusEffect } from 'expo-router';
+import { RecipeInline } from '../../components/RecipeInline';
+import { Recipe, getRecipes } from '../../components/lib/recipesApi';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
+import { ErrorOverlay } from '../../components/ErrorOverlay';
+import { HeaderMenu, MenuItem } from '../../components/HeaderMenu';
 
 export default function RecipeListScreen() {
-  const handleCreateNavigation = () => {
-    router.push({ pathname: '/recipes/create' });
-  };
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const recipeMenuOptions: MenuItem[] = [
+    {
+      label: 'Create Recipe',
+      icon: 'add-circle-outline',
+      onPress: () => router.push('/recipes/create'),
+    },
+  ];
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsLoading(true);
+      getRecipes()
+        .then(data => {
+          setRecipes(data);
+        })
+        .catch(() => {
+          setError('An Error occurred while fetching studios!');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }, []),
+  );
 
   return (
-    <View style={styles.container}>
-      <Text>Recipes to be listed here!</Text>
-      <TouchableOpacity
-        onPress={handleCreateNavigation}
-        className="flex-1 h-12 rounded-lg items-center justify-center bg-transparent border border-neutral-200 active:bg-neutral-100">
-        <Text className="text-neutral-600 text-base font-medium">
-          Create a Recipe
-        </Text>
-      </TouchableOpacity>
+    <View className="flex-1 bg-white">
+      {/* Configure Expo Router Stack Header */}
+      <Stack.Screen
+        options={{
+          title: 'Recipe Library',
+          headerRight: () => <HeaderMenu items={recipeMenuOptions} />,
+        }}
+      />
+
+      {isLoading && <LoadingOverlay message="Fetching Your Recipes..." />}
+      {!isLoading && error != null && <ErrorOverlay message={error} />}
+
+      {/* Main List Content */}
+      <FlatList
+        data={recipes}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => <RecipeInline {...item} />}
+        contentContainerClassName="p-4"
+        ListEmptyComponent={
+          <View className="flex-1 items-center justify-center py-24">
+            <Text className="text-neutral-400 text-base">
+              No recipes found yet.
+            </Text>
+          </View>
+        }
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
