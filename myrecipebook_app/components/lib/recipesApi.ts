@@ -70,7 +70,7 @@ export interface RecipeValidationErrorState {
   non_field_errors?: string[];
 }
 
-export async function getRecipe(recipeID: number): Promise<Recipe> {
+export async function getRecipe(recipeID: string): Promise<Recipe> {
   const response = await apiFetch(`/recipes/${recipeID}`);
 
   if (!response.ok) {
