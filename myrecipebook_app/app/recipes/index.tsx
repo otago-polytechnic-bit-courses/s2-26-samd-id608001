@@ -43,6 +43,7 @@ export default function RecipeListScreen() {
         options={{
           title: 'Recipe Library',
           headerRight: () => <HeaderMenu items={recipeMenuOptions} />,
+          headerBackVisible: false,
         }}
       />
 
