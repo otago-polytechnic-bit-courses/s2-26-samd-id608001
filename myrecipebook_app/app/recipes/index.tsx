@@ -20,6 +20,10 @@ export default function RecipeListScreen() {
     },
   ];
 
+  const handleErrorOk = () => {
+    router.push('../login');
+  };
+
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
@@ -48,7 +52,9 @@ export default function RecipeListScreen() {
       />
 
       {isLoading && <LoadingOverlay message="Fetching Your Recipes..." />}
-      {!isLoading && error != null && <ErrorOverlay message={error} />}
+      {!isLoading && error != null && (
+        <ErrorOverlay message={error} onPressOk={handleErrorOk} />
+      )}
 
       {/* Main List Content */}
       <FlatList
