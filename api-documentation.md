@@ -174,3 +174,40 @@ python manage.py test
 ]
 
 ```
+
+### Get One
+```json
+{
+    "id": 19,
+    "owner": 8,
+    "title": "Crunchy Avocado Toast",
+    "description": "A healthy and satisfying snack loaded with healthy fats and a bit of a spicy kick.",
+    "method": "Toast the bread until golden and crisp. Mash the avocado with lemon juice, salt, and red pepper flakes. Spread evenly across the toast and top with a drizzle of olive oil.",
+    "ingredients": [
+        {
+            "id": 40,
+            "amount": 2.0,
+            "measurement": "whole",
+            "ingredient_name": "sourdough bread slices"
+        },
+        {
+            "id": 41,
+            "amount": 1.0,
+            "measurement": "whole",
+            "ingredient_name": "ripe avocado"
+        },
+        {
+            "id": 42,
+            "amount": 1.0,
+            "measurement": "teaspoon",
+            "ingredient_name": "lemon juice"
+        },
+        {
+            "id": 43,
+            "amount": 5.0,
+            "measurement": "millilitre",
+            "ingredient_name": "olive oil"
+        }
+    ]
+}
+```
