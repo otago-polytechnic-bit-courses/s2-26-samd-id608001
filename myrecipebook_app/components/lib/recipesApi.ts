@@ -71,7 +71,7 @@ export interface RecipeValidationErrorState {
 }
 
 export async function getRecipe(recipeID: string): Promise<Recipe> {
-  const response = await apiFetch(`/recipes/${recipeID}`);
+  const response = await apiFetch(`/recipes/${recipeID}/`);
 
   if (!response.ok) {
     throw new Error('Could not load recipes');
@@ -111,7 +111,7 @@ export async function createRecipe(recipe: DraftRecipe): Promise<Recipe> {
 }
 
 export async function updateRecipe(recipe: DraftRecipe): Promise<Recipe> {
-  const response = await apiFetch(`/recipes/${recipe.id}`, {
+  const response = await apiFetch(`/recipes/${recipe.id}/`, {
     method: 'PUT',
     body: JSON.stringify(recipe),
   });
@@ -124,7 +124,7 @@ export async function updateRecipe(recipe: DraftRecipe): Promise<Recipe> {
 }
 
 export async function deleteRecipe(recipeID: number): Promise<void> {
-  const response = await apiFetch(`/recipes/${recipeID}`, {
+  const response = await apiFetch(`/recipes/${recipeID}/`, {
     method: 'DELETE',
   });
 
