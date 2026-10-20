@@ -1,10 +1,10 @@
 import { useLocalSearchParams, Stack, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { getRecipe, Recipe } from '../../components/lib/recipesApi';
-import { LoadingOverlay } from '../../components/LoadingOverlay';
-import { ErrorOverlay } from '../../components/ErrorOverlay';
-import { HeaderMenu, MenuItem } from '../../components/HeaderMenu';
+import { getRecipe, Recipe } from '../../../components/lib/recipesApi';
+import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { ErrorOverlay } from '../../../components/ErrorOverlay';
+import { HeaderMenu, MenuItem } from '../../../components/HeaderMenu';
 
 export default function StudioDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,12 +16,11 @@ export default function StudioDetailScreen() {
     {
       label: 'Edit Recipe',
       icon: 'pencil-outline',
-      onPress: () => router.push('/recipes/edit'),
+      onPress: () => router.push(`/recipes/${id}/edit`),
     },
   ];
 
   useEffect(() => {
-    setIsLoading(true);
     getRecipe(id)
       .then(data => {
         setRecipe(data);
