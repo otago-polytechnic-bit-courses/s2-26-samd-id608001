@@ -5,7 +5,10 @@ interface ErrorOverlayProps {
   onPressOk?: () => void;
 }
 
-export function ErrorOverlay({ message, onPressOk = () => {} }: ErrorOverlayProps) {
+export function ErrorOverlay({
+  message,
+  onPressOk = () => {},
+}: ErrorOverlayProps) {
   return (
     <OverlayMessage
       message={message}
