@@ -36,7 +36,7 @@ export default function StudioDetailScreen() {
   return (
     <ScrollView
       className="flex-1 bg-white"
-      contentContainerClassName="px-6 py-3">
+      contentContainerClassName="h-full px-6 py-3">
       {/* Configure Expo Router Stack Header */}
       <Stack.Screen
         options={{
