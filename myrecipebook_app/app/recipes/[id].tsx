@@ -13,7 +13,11 @@ export default function StudioDetailScreen() {
   const [error, setError] = useState<string | null>(null);
 
   const recipeMenuOptions: MenuItem[] = [
-    // Menu options to be added for edit and delete
+    {
+      label: 'Edit Recipe',
+      icon: 'pencil-outline',
+      onPress: () => router.push('/recipes/edit'),
+    },
   ];
 
   useEffect(() => {
