@@ -128,9 +128,7 @@ export async function deleteRecipe(recipeID: number): Promise<void> {
     method: 'DELETE',
   });
 
-  if (!response.ok) {
+  if (response.status !== 204) {
     throw new Error('Could not delete recipe');
   }
-
-  return response.json();
 }
