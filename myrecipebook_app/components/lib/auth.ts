@@ -89,7 +89,10 @@ export async function login(username: string, password: string): Promise<void> {
 
     const data: Token = await response.json();
     await saveToken(data);
-  } catch {
+  } catch (error: any) {
+    if (error.message === 'Invalid username or password') {
+      throw error;
+    }
     throw new Error("Unable to log you in. Please check you are online and try again later.");
   }
 }
