@@ -119,7 +119,11 @@ export default function IngredientInline({
 
       {/* Remove Button */}
       <TouchableOpacity
-        onPress={() => handleRemoveIngredient(ingredient.id)}
+        onPress={() => {
+            if (showRemove && !disableInputs)
+              handleRemoveIngredient(ingredient.id)
+          }
+        }
         className="w-8 h-[38px] items-center justify-center ml-1">
         {showRemove && !disableInputs && (
           <Text className="text-lg text-gray-500 font-bold">x</Text>

@@ -26,7 +26,7 @@ export default function CreateRecipeScreen() {
   const [success, setSuccess] = useState<boolean>(false);
 
   // State for surfacing validation errors from the backend
-  const [errors, setErrors] = useState<RecipeValidationErrorState | null>(null);
+  const [validationErrors, setValidationErrors] = useState<RecipeValidationErrorState | null>(null);
   // State for global error ie when fetching initial recipe
   const [error, setError] = useState<string | null>(null);
 
@@ -55,7 +55,7 @@ export default function CreateRecipeScreen() {
 
   const handleUpdate = async () => {
     setIsLoading(true);
-    setErrors(null);
+    setValidationErrors(null);
 
     const payload: DraftRecipe = {
       id: Number(id),
@@ -74,8 +74,9 @@ export default function CreateRecipeScreen() {
       await updateRecipe(payload);
       setSuccess(true);
     } catch (err: any) {
-      if (err && typeof err === 'object') setErrors(err);
-      else setErrors({ non_field_errors: [String(err)] });
+      if (err && err.validationError) {
+        setValidationErrors(err);
+      } else setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -96,9 +97,9 @@ export default function CreateRecipeScreen() {
             router.back();
           }}
         />
-      )}
-
-      {!isLoading && error != null && (
+      )}      
+      {/* Full-screen Error overlay */}
+      {!isLoading && !success && error && (
         <ErrorOverlay
           message={error}
           onPressOk={() => {
@@ -118,7 +119,7 @@ export default function CreateRecipeScreen() {
         setIngredients={setIngredients}
         handleAddIngredient={handleAddIngredient}
         disableInputs={isLoading || success}
-        errors={errors}
+        errors={validationErrors}
       />
 
       {/* Footer Actions */}

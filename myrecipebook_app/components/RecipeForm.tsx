@@ -178,15 +178,6 @@ export default function RecipeForm({
           </Text>
         ))}
       </View>
-
-      {/* Global Non-Field Errors */}
-      {errors?.non_field_errors?.map((msg, index) => (
-        <Text
-          key={index}
-          className="text-sm font-medium text-red-500 mb-4 text-center">
-          {msg}
-        </Text>
-      ))}
     </ScrollView>
   );
 }

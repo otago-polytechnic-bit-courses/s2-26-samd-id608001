@@ -67,7 +67,6 @@ export interface RecipeValidationErrorState {
         [index: string]: IngredientValidationError; // Handles "0", "1", etc.
       }
     | string[]; // Handles top-level list errors like "This list may not be empty"
-  non_field_errors?: string[];
 }
 
 export async function getRecipe(recipeID: string): Promise<Recipe> {
@@ -91,36 +90,47 @@ export async function getRecipes(): Promise<Recipe[]> {
 }
 
 export async function createRecipe(recipe: DraftRecipe): Promise<Recipe> {
-  const response = await apiFetch('/recipes/', {
-    method: 'POST',
-    body: JSON.stringify(recipe),
-  });
+  try {
+    const response = await apiFetch('/recipes/', {
+      method: 'POST',
+      body: JSON.stringify(recipe),
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
+    if (!response.ok) {
+      const errorData = await response.json();
+      errorData.validationError = true;
+      throw errorData;
+    }
 
-    if (errorData.detail)
-      errorData.non_field_errors = [
-        `An unexpected error occurred: ${errorData.detail}`,
-      ];
-
-    throw errorData;
+    return response.json();
+  } catch {
+    throw {
+      validationError: false,
+      message: "Unable to create recipe, Please check you are online and try again later."
+    };
   }
-
-  return response.json();
 }
 
 export async function updateRecipe(recipe: DraftRecipe): Promise<Recipe> {
-  const response = await apiFetch(`/recipes/${recipe.id}/`, {
-    method: 'PUT',
-    body: JSON.stringify(recipe),
-  });
+  try {
+    const response = await apiFetch(`/recipes/${recipe.id}/`, {
+      method: 'PUT',
+      body: JSON.stringify(recipe),
+    });
 
-  if (!response.ok) {
-    throw new Error('Could not update recipe');
+    if (!response.ok) {
+      const errorData = await response.json();
+      errorData.validationError = true;
+      throw errorData;
+    }
+
+    return response.json();
+  } catch {
+    throw {
+      validationError: false,
+      message: "Unable to create recipe, Please check you are online and try again later."
+    };
   }
-
-  return response.json();
 }
 
 export async function deleteRecipe(recipeID: number): Promise<void> {
