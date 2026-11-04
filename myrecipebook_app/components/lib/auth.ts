@@ -76,18 +76,22 @@ export async function clearToken(): Promise<void> {
 }
 
 export async function login(username: string, password: string): Promise<void> {
-  const response = await fetch(`${BASE_URL}/auth/login/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
+  try {
+    const response = await fetch(`${BASE_URL}/auth/login/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
 
-  if (!response.ok) {
-    throw new Error('Invalid username or password');
+    if (!response.ok) {
+      throw new Error('Invalid username or password');
+    }
+
+    const data: Token = await response.json();
+    await saveToken(data);
+  } catch {
+    throw new Error("Unable to log you in. Please check you are online and try again later.");
   }
-
-  const data: Token = await response.json();
-  await saveToken(data);
 }
 
 export async function register(
