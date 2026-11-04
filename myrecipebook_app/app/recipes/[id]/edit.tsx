@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, KeyboardAvoidingView, Text, TouchableOpacity } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { LoadingOverlay } from '../../../components/LoadingOverlay';
 import RecipeForm from '../../../components/RecipeForm';
@@ -83,7 +83,7 @@ export default function CreateRecipeScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} className="flex-1 bg-white">
       <Stack.Screen options={{ title: 'Editing Recipe' }} />
 
       {/* Full-screen loading overlay */}
@@ -136,6 +136,6 @@ export default function CreateRecipeScreen() {
           <Text className="text-gray-900 font-bold text-lg">Cancel</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

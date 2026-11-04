@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
 import { LoadingOverlay } from '../components/LoadingOverlay';
@@ -48,7 +48,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-neutral-50 px-6">
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} className="flex-1 justify-center items-center bg-neutral-50 px-6">
       <Stack.Screen options={{ headerShown: false }} />
 
       <View className="w-full max-w-md md:max-w-xl">
@@ -177,6 +177,6 @@ export default function RegisterScreen() {
       {isLoading && (
         <LoadingOverlay message="Registering you..."></LoadingOverlay>
       )}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
